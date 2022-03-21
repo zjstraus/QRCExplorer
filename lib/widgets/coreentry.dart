@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qrcexplorer/qrcConnection/resultModels.dart';
+import 'package:qrcexplorer/widgets/coreInfoDialog.dart';
 
-import '../models.dart';
 import '../qsysDiscovery/discovery.dart';
 
 class CoreEntry extends StatelessWidget {
@@ -39,6 +39,13 @@ class CoreEntry extends StatelessWidget {
         title: Text(core.name),
         subtitle: Text(core.designPretty),
         leading: Icon(statusIcon),
+        trailing: IconButton(
+          onPressed: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => CoreInfoDialog(core, status)
+          ),
+          icon: Icon(Icons.question_mark),
+        )
       )
     );
   }
