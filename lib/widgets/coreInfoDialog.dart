@@ -49,6 +49,31 @@ class CoreInfoDialog extends StatelessWidget {
                           ))
                     ]),
                 Divider(),
+                ListTile(title: Text("Status")),
+                GridView(padding: const EdgeInsets.all(4),
+                    primary: false,
+                    shrinkWrap: true,
+                    gridDelegate:
+                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 300,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        childAspectRatio: 3),
+                    children: <Widget>[
+                    Container(
+                    width: 300,
+                    child: ListTile(
+                      title: Text("Code"),
+                      subtitle: Text(status?.code.toString() ?? 'Unknown'),
+                    )),
+                      Container(
+                          width: 600,
+                          child: ListTile(
+                            title: Text("Text"),
+                            subtitle: Text(status?.string ?? 'Unknown'),
+                          )),
+                ]),
+                Divider(),
                 ListTile(title: Text("Network")),
                 GridView(
                     padding: const EdgeInsets.all(4),
