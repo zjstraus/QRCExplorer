@@ -76,6 +76,11 @@ class QRCconnection {
         }
         break;
 
+        case 'Component.GetControls': {
+          result = ComponentGetControlsResponse.fromJson(message);
+        }
+        break;
+
         default: {
           result = partialResponse;
         }
@@ -108,6 +113,11 @@ class QRCconnection {
 
   void statusGet() {
     var request = StatusGetCall();
+    _callJSONRPCWithReturn(request);
+  }
+
+  void componentGetControls(String component) {
+    var request = ComponentGetControlsCall(component);
     _callJSONRPCWithReturn(request);
   }
 }

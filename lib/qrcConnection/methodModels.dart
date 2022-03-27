@@ -35,3 +35,9 @@ class ControlSetTranslateCall extends QRCCall {
 class StatusGetCall extends QRCCall {
   StatusGetCall(): super("StatusGet");
 }
+
+class ComponentGetControlsCall extends QRCCall {
+  String componentName;
+
+  ComponentGetControlsCall(this.componentName): super("Component.GetControls", params: <String, String>{"Name": componentName});
+}

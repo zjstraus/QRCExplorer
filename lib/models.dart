@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:qrcexplorer/qrcConnection/resultModels.dart';
 import 'package:qrcexplorer/qsysDiscovery/discovery.dart';
 
@@ -6,6 +7,8 @@ class AppState {
   Map<String, QRCStatus> coreStatus = {};
   Map<String, List<QRCComponent>> coreNamedComponents = {};
   Map<String, List<String>> _expandedComponents = {};
+
+  Map<String, List<QRCComponentControl>> componentControls = {};
 
   String selectedCore = 'Select a discovered Core in the hamburger menu';
 
@@ -25,6 +28,9 @@ class AppState {
   }
 
   void setSelectedCore(String core) {
+    if (selectedCore != core) {
+      componentControls = {};
+    }
     selectedCore = core;
   }
 
@@ -65,6 +71,22 @@ class AppState {
     }
   }
 
+  void updateNamedControls(String component, List<QRCComponentControl> controls) {
+    if (!componentControls.containsKey(component)) {
+      componentControls[component] = controls;
+    } else {
+      for (var i = 0; i < controls.length; i++) {
+        for (var j = 0; j < componentControls[component]!.length; j++) {
+          if (componentControls[component]![j].name == controls[i].name) {
+            componentControls[component]![j] = controls[i];
+            continue;
+          }
+          componentControls[component]!.add(controls[i]);
+        }
+      }
+    }
+  }
+
   List<QRCComponent> namedComponents() {
     if (coreNamedComponents.containsKey(selectedCore)) {
       return coreNamedComponents[selectedCore]!;
@@ -77,6 +99,14 @@ class AppState {
       return _expandedComponents[selectedCore]!;
     }
     return <String>[];
+  }
+
+  List<QRCComponentControl> controlsOnComponent(String component) {
+    return componentControls[component] ?? <QRCComponentControl>[];
+  }
+
+  QRCComponent? namedComponentAtIndex(int index) {
+    return coreNamedComponents[selectedCore]?.elementAt(index);
   }
 
   void namedComponentExpansionCallback(int index, bool isExpanded) {

@@ -76,6 +76,12 @@ class QsysAppState extends State<QsysApp> {
     }
   }
 
+  namedComponentControlsUpdateHandler(String component, List<QRCComponentControl> controls) {
+    setState(() {
+      appState.updateNamedControls(component, controls);
+    });
+  }
+
   coreDiscoveryHandler(QSYSCore core) {
     if (appState.coreUpdateNeeded(core)) {
       setState(() {
@@ -98,6 +104,12 @@ class QsysAppState extends State<QsysApp> {
               }
             }
           }
+
+          if (event is ComponentGetControlsResponse) {
+            if (event.result.isNotEmpty) {
+              event.result.forEach((key, value) => namedComponentControlsUpdateHandler(key, value));
+            }
+          }
         });
         connections[core.name] = connection;
       }
@@ -108,6 +120,13 @@ class QsysAppState extends State<QsysApp> {
     setState(() {
       appState.namedComponentExpansionCallback(index, isExpanded);
     });
+    var component = appState.namedComponentAtIndex(index);
+    if (component != null) {
+      var connection = connections[appState.selectedCore];
+      if (connection != null) {
+        connection.componentGetControls(component.name);
+      }
+    }
   }
 
   @override
@@ -125,7 +144,7 @@ class QsysAppState extends State<QsysApp> {
         body: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
-          child: NamedComponentList(appState.namedComponents(), appState.expandedComponents(), namedComponentExpansionCallback),
+          child: NamedComponentList(appState.namedComponents(), appState.expandedComponents(), namedComponentExpansionCallback, appState.controlsOnComponent),
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );

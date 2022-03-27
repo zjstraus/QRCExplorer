@@ -198,3 +198,107 @@ class ComponentGetComponentsResponse extends QRCResponse {
     }
   }
 }
+
+class QRCComponentControl {
+  String? name;
+  String? type;
+  dynamic value;
+  String? string;
+  double? position;
+  String? direction;
+  double? valueMin;
+  double? valueMax;
+  String? stringMax;
+  String? stringMin;
+
+  QRCComponentControl.fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('Name')) {
+      name = json['Name'];
+    }
+
+    if (json.containsKey('Type')) {
+      type = json['Type'];
+    }
+
+    if (json.containsKey('Value')) {
+      value = json['Value'];
+    }
+
+    if (json.containsKey('String')) {
+      string = json['String'];
+    }
+
+    if (json.containsKey('Position')) {
+      position = json['Position'];
+    }
+
+    if (json.containsKey('Direction')) {
+      direction = json['Direction'];
+    }
+
+    if (json.containsKey('ValueMin')) {
+      valueMin = json['ValueMin'];
+    }
+
+    if (json.containsKey('ValueMax')) {
+      valueMax = json['ValueMax'];
+    }
+
+    if (json.containsKey('Direction')) {
+      direction = json['Direction'];
+    }
+
+    if (json.containsKey('StringMin')) {
+      stringMin = json['StringMin'];
+    }
+
+    if (json.containsKey('StringMax')) {
+      stringMax = json['StringMax'];
+    }
+  }
+}
+
+class ComponentGetControlsResponse extends QRCResponse {
+  Map <String, List<QRCComponentControl>> result = {};
+
+  ComponentGetControlsResponse.fromJson(Map<String, dynamic> json) : super.fromJson(json) {
+    method = "Component.GetControls";
+    if (rawResult is List) {
+      List listResult = rawResult as List;
+
+      for (var i = 0; i < listResult.length; i++) {
+        String controlName = '';
+        if (listResult[i].containsKey('Name')) {
+          controlName = listResult[i]['Name'];
+        }
+
+        List<QRCComponentControl> controls = [];
+        if (listResult[i].containsKey('Controls')) {
+          var controlsEntry = listResult[i]['Controls'];
+          if (controlsEntry is List) {
+            controls = controlsEntry.map((e) => QRCComponentControl.fromJson(e)).toList();
+          }
+        }
+        if (controlName != '' && controls.isNotEmpty) {
+          result[controlName] = controls;
+        }
+      }
+    } else {
+      String controlName = '';
+      if (rawResult.containsKey('Name')) {
+        controlName = rawResult['Name'];
+      }
+
+      List<QRCComponentControl> controls = [];
+      if (rawResult.containsKey('Controls')) {
+        var controlsEntry = rawResult['Controls'];
+        if (controlsEntry is List) {
+          controls = controlsEntry.map((e) => QRCComponentControl.fromJson(e)).toList();
+        }
+      }
+      if (controlName != '' && controls.isNotEmpty) {
+        result[controlName] = controls;
+      }
+    }
+  }
+}
