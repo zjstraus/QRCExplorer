@@ -79,7 +79,7 @@ class AppState {
         for (var j = 0; j < componentControls[component]!.length; j++) {
           if (componentControls[component]![j].name == controls[i].name) {
             componentControls[component]![j] = controls[i];
-            continue;
+            break;
           }
           componentControls[component]!.add(controls[i]);
         }
